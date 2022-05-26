@@ -5,8 +5,30 @@
   text-align: center;
   margin-bottom: 65px;
 
-  &:not(:nth-of-type(4n)) {
-    margin-right: 35px;
+  @media (max-width: 375px) {
+    width: 250px;
+    margin-bottom: 50px;
+
+    .pizza-block-wrapper {
+      display: block;
+    }
+
+    &__image {
+      width: 170px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    width: 220px;
+
+    &__image {
+      width: 200px;
+    }
+  }
+
+  &-wrapper {
+    display: flex;
+    justify-content: center;
   }
 
   &__image {
