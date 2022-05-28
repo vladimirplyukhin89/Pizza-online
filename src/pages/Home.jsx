@@ -4,7 +4,7 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import PizzaSkeleton from "../components/PizzaBlock/PizzaSkeleton";
 
-const Home = () => {
+const Home = ({ searchValue }) => {
   const [items, setItems] = React.useState([]);
   const [isLoading, setisLoading] = React.useState(true);
   const [categoryId, setCategoryId] = React.useState(0);
@@ -20,8 +20,10 @@ const Home = () => {
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const sortBy = sortType.sortProperty.replace("-", "");
     const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
+    //** Сортировка пицц из инпута на бэкэнде */
+    const search = searchValue ? `search=${searchValue}` : "";
 
-    fetch(URL + `${category}&sortBy=${sortBy}&order=${order}`)
+    fetch(URL + `${category}&sortBy=${sortBy}&order=${order}&${search}`)
       .then((res) => res.json())
       .then((json) => {
         setItems(json);
@@ -30,7 +32,21 @@ const Home = () => {
         }
       });
     window.scrollTo(0, 0);
-  }, [categoryId, sortType]);
+  }, [categoryId, sortType, searchValue]);
+
+  const skeletons = [...new Array(6)].map((_, index) => (
+    <PizzaSkeleton key={index} />
+  ));
+
+  //** Сортировка пицц из инпута на фронте для статичных данных*/
+  const pizzas = items
+    //.filter((obj) => {
+    //  if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
+    //    return true;
+    //  }
+    //  return false;
+    //})
+    .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
 
   return (
     <div div className="container">
@@ -44,11 +60,7 @@ const Home = () => {
       </div>
       <h2 className="content__title">Все пиццы</h2>
 
-      <div className="content__items">
-        {isLoading
-          ? [...new Array(6)].map((_, index) => <PizzaSkeleton key={index} />)
-          : items.map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
-      </div>
+      <div className="content__items">{isLoading ? skeletons : pizzas}</div>
     </div>
   );
 };
