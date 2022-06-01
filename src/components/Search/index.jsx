@@ -3,8 +3,10 @@ import React from "react";
 import s from "./styles.module.scss";
 import { MdSearch } from "react-icons/md";
 import { MdClear } from "react-icons/md";
+import { SearchContext } from "../../App";
 
-const Search = ({ searchValue, setSearchValue }) => {
+const Search = () => {
+  const { searchValue, setSearchValue } = React.useContext(SearchContext);
   return (
     <div className={s.root}>
       {searchValue && (
